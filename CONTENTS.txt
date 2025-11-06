@@ -1,0 +1,158 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║        Advanced DDoS Experiment - Package Contents                ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+📁 DIRECTORY STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+advanced_ddos_c6525/
+├── 📖 README.md                    - Project overview
+├── 📖 EXECUTE.md                   - Complete execution guide (35 pages)
+├── 📖 QUICKREF.md                  - Quick reference card
+├── 📖 CONTENTS.txt                 - This file
+│
+├── 🔧 setup/                       - Installation scripts
+│   ├── 00_init_c6525.sh           - Initial node setup (all nodes)
+│   ├── 01_dpdk_install.sh         - DPDK 23.11 installation
+│   ├── 02_octosketch_build.sh     - Detector compilation
+│   └── 03_trex_setup.sh           - TRex traffic generator setup
+│
+├── 🔍 octosketch/                  - DPDK Detector Source
+│   ├── detector.c                 - Main detector (500+ lines)
+│   ├── attacks.h                  - Attack type definitions
+│   └── Makefile                   - Build configuration
+│
+├── 💥 attacks/                     - Attack Profiles
+│   └── generate_attacks.py        - Attack profile generator (9 types)
+│
+└── 🤖 automation/                  - Experiment Automation
+    └── run_experiment.sh          - Full experiment orchestration
+
+
+📋 FILE DESCRIPTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Documentation:
+──────────────
+  README.md       → Quick start guide and overview
+  EXECUTE.md      → Complete step-by-step guide with troubleshooting
+  QUICKREF.md     → Command reference card
+
+Setup Scripts:
+──────────────
+  00_init_c6525.sh       → System initialization, hugepages, network tuning
+  01_dpdk_install.sh     → DPDK 23.11 download, compile, install
+  02_octosketch_build.sh → OctoSketch detector compilation
+  03_trex_setup.sh       → TRex traffic generator installation
+
+Detector Source:
+────────────────
+  detector.c      → Main DPDK detector (Count-Min Sketch, multi-core)
+  attacks.h       → Attack type definitions (15 types)
+  Makefile        → Compilation configuration
+
+Attack Generation:
+──────────────────
+  generate_attacks.py → Creates 9 attack profiles for TRex:
+                        • SYN Flood (50 Gbps)
+                        • UDP Flood (80 Gbps)
+                        • DNS Amplification (40 Gbps)
+                        • NTP Amplification (35 Gbps)
+                        • HTTP Flood (10 Gbps)
+                        • ICMP Flood (30 Gbps)
+                        • IP Fragmentation (20 Gbps)
+                        • ACK Flood (45 Gbps)
+                        • Volumetric Mixed (95 Gbps)
+
+Automation:
+───────────
+  run_experiment.sh → Orchestrates full experiment:
+                      • Starts detector on node-monitor
+                      • Runs 9 attacks sequentially
+                      • Collects logs and results
+                      • Generates summary report
+
+
+⏱️  EXECUTION TIME
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Phase 1: Initial Setup (all nodes)          5 min
+Phase 2: DPDK Installation (node-monitor)  12 min
+Phase 3: OctoSketch Build (node-monitor)    8 min
+Phase 4: TRex Setup (node-tg)               5 min
+                                          ────────
+Total Setup Time:                          30 min
+
+Experiment Execution:                      15 min
+                                          ────────
+TOTAL TIME:                                45 min
+
+
+🎯 GETTING STARTED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Upload package to all CloudLab nodes:
+   scp -r advanced_ddos_c6525 node-X:/local/exp
+
+2. Start with EXECUTE.md - it has everything:
+   cat EXECUTE.md
+
+3. For quick commands, see QUICKREF.md:
+   cat QUICKREF.md
+
+
+📊 EXPECTED OUTPUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Results Directory: /local/results/exp_<timestamp>/
+├── detection.log          - CSV with PPS, Gbps, anomalies
+├── detector.log           - Detector console output
+├── timeline.log           - Attack timeline
+├── summary.txt            - Experiment summary
+└── trex_*.log            - TRex logs per attack
+
+Detection Log Format:
+timestamp,pps,gbps,anomalies,syn,udp,icmp,ack,frag
+1699123456,125000000,50.2,1245,89234,12456,234,23445,123
+
+
+🔧 SYSTEM REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Hardware:
+  • 4× c6525-100g nodes (AMD EPYC, 100G NICs)
+  • 128 GB RAM per node
+  • 100 Gbps network interfaces
+
+Software:
+  • Ubuntu 22.04 or 24.04
+  • DPDK 23.11
+  • TRex v3.05
+  • Python 3.8+
+
+Network:
+  • 100G connectivity between nodes
+  • Low latency (<1ms)
+  • Dedicated data interfaces
+
+
+✨ KEY FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ 100 Gbps line-rate packet processing
+✓ Multi-core DPDK architecture (16 cores)
+✓ Count-Min Sketch for memory-efficient detection
+✓ 9 diverse attack types at high rates
+✓ Real-time anomaly detection (<100µs latency)
+✓ Automated experiment workflow
+✓ Comprehensive logging and statistics
+
+
+📞 SUPPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Issues? Check:
+1. EXECUTE.md - Troubleshooting section
+2. /local/logs/ - Log files
+3. QUICKREF.md - Common commands
+
